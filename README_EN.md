@@ -19,13 +19,15 @@ Keystroke Events → Activity Score (0-100) → Color-coded Badge → Real-time 
 
 ### Activity Levels
 
+Lower score = more typing activity (`score = 100 - activity`):
+
 | Score | Status | Color | Meaning |
 |-------|--------|-------|---------|
-| 80-100 | Deep Focus | Red | Typing intensively |
-| 60-79 | Busy | Orange | Active at the keyboard |
+| 0-19 | Deep Focus | Gray | Typing intensively, fully concentrated |
+| 20-39 | Busy | Green | Active at the keyboard |
 | 40-59 | Moderate | Yellow | Regular activity |
-| 20-39 | Light | Green | Light usage |
-| 0-19 | Free | Gray | Idle or away |
+| 60-79 | Light | Orange | Occasional typing |
+| 80-100 | Free | Red | Idle, available to chat |
 
 ## Features
 
