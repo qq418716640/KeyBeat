@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "KeyBeat",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "See each other's work rhythm through keystroke activity.",
   "permissions": [
     "alarms",
