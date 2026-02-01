@@ -48,7 +48,7 @@ Lower score = more typing activity (`score = 100 - activity`):
 │   ┌───┐        ┌───┐       │
 │   │ 72│        │ 35│       │
 │   └───┘        └───┘       │
-│   Busy         Light        │
+│   Light        Busy         │
 │                             │
 │  [Generate Pair Key]        │
 │        ── or ──             │
