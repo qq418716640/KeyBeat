@@ -47,6 +47,7 @@ function applyStatus(res) {
     $("partnerDetail").textContent = "Not paired";
     showUnpaired();
   }
+
 }
 
 // --- Cache: save/restore last status to chrome.storage.local ---
@@ -232,7 +233,7 @@ $("btnRestore").addEventListener("click", () => {
   });
 });
 
-// --- Startup: restore cache first, then refresh from background ---
+// --- Startup ---
 
 restoreCachedStatus();
 refreshStatus();

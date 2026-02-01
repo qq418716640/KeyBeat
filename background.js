@@ -92,10 +92,28 @@ async function restoreKeys() {
 
 // --- Periodic sync (alarm-based, survives SW sleep) ---
 
+// Collect kb_* entries from storage (written by content scripts)
+async function collectStorageKeys() {
+  const data = await chrome.storage.local.get(null);
+  const keysToDelete = [];
+  for (const [key, val] of Object.entries(data)) {
+    if (key.startsWith("kb_") && val && val.ts && val.count) {
+      recentKeys.push({ ts: val.ts, count: val.count });
+      keysToDelete.push(key);
+    }
+  }
+  if (keysToDelete.length > 0) {
+    await chrome.storage.local.remove(keysToDelete);
+  }
+}
+
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name !== SYNC_INTERVAL_NAME) return;
 
   try { await ensureInit(); } catch {}
+
+  // Collect key data from content scripts via storage
+  try { await collectStorageKeys(); } catch {}
 
   // Always compute and update locally, even if Firebase is unreachable
   pruneOldKeys();
@@ -311,33 +329,13 @@ async function unpair() {
 // --- Single message handler for all message types (C2 fix) ---
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-  if (msg.type === "KEY_COUNT" && typeof msg.count === "number") {
-
-    if (!keysReady) {
-      keysReadyPromise.then(() => {
-        recentKeys.push({ ts: Date.now(), count: msg.count });
-        persistKeys();
-        computeScore();
-        updateBadge();
-
-      });
-    } else {
-      recentKeys.push({ ts: Date.now(), count: msg.count });
-      persistKeys();
-      computeScore();
-      updateBadge();
-
-    }
-    return;
-  }
-
   if (msg.type === "GET_STATUS") {
 
     (async () => {
       try {
         if (!keysReady) await keysReadyPromise;
 
-
+        await collectStorageKeys();
         pruneOldKeys();
         computeScore();
 
@@ -368,15 +366,13 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       } catch (err) {
         console.error("[KeyBeat] GET_STATUS error:", err);
       } finally {
-        const resp = {
+        sendResponse({
           uid: getUid(),
           myScore,
           partnerScore,
           partnerId,
           recentKeyCount: windowCount(WINDOW_5M),
-        };
-
-        sendResponse(resp);
+        });
       }
     })();
     return true;
@@ -444,11 +440,81 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 // --- Startup ---
 
 
-chrome.runtime.onInstalled.addListener(() => {
+// Content script logic as inline function (injected via chrome.scripting API)
+function _contentScriptFunc() {
+  if (window._keyBeatLoaded) return;
+  window._keyBeatLoaded = true;
+
+  let keyCount = 0;
+  let flushTimer = null;
+
+  document.addEventListener("keydown", () => {
+    keyCount++;
+    if (!flushTimer) {
+      flushTimer = setTimeout(flush, 3000);
+    }
+  }, true); // capture phase
+
+  function flush() {
+    if (flushTimer) { clearTimeout(flushTimer); flushTimer = null; }
+    if (keyCount === 0) return;
+    const count = keyCount;
+    keyCount = 0;
+    const key = `kb_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    chrome.storage.local.set({ [key]: { ts: Date.now(), count } });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flush();
+  });
+
+}
+
+// Inject content script into a single tab
+async function injectTab(tabId) {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      func: _contentScriptFunc,
+    });
+  } catch (err) {
+    console.warn(`[KeyBeat] inject tab ${tabId} failed:`, err.message);
+  }
+}
+
+// Inject content script into all existing tabs
+async function injectContentScriptToAllTabs() {
+  try {
+    const tabs = await chrome.tabs.query({});
+    for (const tab of tabs) {
+      if (!tab.url || tab.url.startsWith("chrome") || tab.url.startsWith("about") || tab.url.startsWith("edge")) continue;
+      await injectTab(tab.id);
+    }
+  } catch (err) {
+    console.warn("[KeyBeat] inject all tabs failed:", err);
+  }
+}
+
+// Inject into new/reloaded tabs
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url && !tab.url.startsWith("chrome") && !tab.url.startsWith("about")) {
+    injectTab(tabId);
+  }
+});
+
+chrome.runtime.onInstalled.addListener(async () => {
+  // Nuclear cleanup: preserve only Firebase auth, clear everything else
+  const auth = await chrome.storage.local.get([
+    "fb_idToken", "fb_refreshToken", "fb_uid", "fb_tokenExpiresAt",
+  ]);
+  await chrome.storage.local.clear();
+  if (auth.fb_refreshToken) await chrome.storage.local.set(auth);
+  injectContentScriptToAllTabs();
   init();
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  injectContentScriptToAllTabs();
   init();
 });
 
