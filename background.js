@@ -142,16 +142,6 @@ async function syncToFirebase() {
   const uid = getUid();
   if (!uid) return;
   try {
-    const remote = await dbGet(`users/${uid}`);
-    if (
-      remote &&
-      typeof remote.score === "number" &&
-      remote.score < myScore &&
-      typeof remote.updatedAt === "number" &&
-      Date.now() - remote.updatedAt < 2 * 60 * 1000
-    ) {
-      return; // another device is more active, skip write
-    }
     await dbUpdate(`users/${uid}`, {
       score: myScore,
       keycount5: windowCount(WINDOW_5M),
