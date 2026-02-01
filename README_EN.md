@@ -34,6 +34,7 @@ Lower score = more typing activity (`score = 100 - activity`):
 - **Privacy-first** -- only keystroke counts are tracked, never content or URLs
 - **One-click pairing** -- generate a key, share it, done
 - **Real-time sync** -- see your partner's status update live
+- **Identity backup/restore** -- export a recovery code to preserve your identity and pairing across reinstalls
 - **Minimal permissions** -- only `alarms` and `storage`, no browsing history
 - **Zero dependencies** -- pure JavaScript, no build step required
 - **Manifest V3** -- built on the latest Chrome extension architecture
@@ -121,6 +122,21 @@ Both of you need the extension installed with Firebase configured.
 **Person B:**
 1. Click the KeyBeat icon → paste the key → **Join**
 2. Pairing takes effect immediately
+
+### 4. Backup & Restore Identity
+
+Your KeyBeat identity (UID) is tied to your browser. If you need to reinstall the extension, you can back up your identity beforehand to keep your pairing intact.
+
+**Backup:**
+1. Click the KeyBeat icon → **Backup Identity**
+2. Click the recovery code to copy it to your clipboard, and save it somewhere safe
+
+**Restore:**
+1. After reinstalling, click the KeyBeat icon → **Restore from backup**
+2. Paste your recovery code → **Restore**
+3. Your identity and pairing are automatically restored
+
+> The recovery code contains authentication credentials -- do not share it with others.
 
 ## Project Structure
 
