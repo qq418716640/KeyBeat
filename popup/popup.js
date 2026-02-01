@@ -174,6 +174,64 @@ function showError(msg) {
   $("pairError").classList.remove("hidden");
 }
 
+// --- Backup Identity ---
+
+$("btnExport").addEventListener("click", () => {
+  $("btnExport").disabled = true;
+  chrome.runtime.sendMessage({ type: "EXPORT_IDENTITY" }, (res) => {
+    $("btnExport").disabled = false;
+    if (res && res.ok) {
+      const el = $("recoveryCodeDisplay");
+      el.textContent = res.code;
+      el.classList.remove("hidden");
+      el.title = "Click to copy";
+    } else {
+      const el = $("recoveryCodeDisplay");
+      el.textContent = res?.error || "Failed to export";
+      el.classList.remove("hidden");
+    }
+  });
+});
+
+// Copy recovery code on click
+$("recoveryCodeDisplay").addEventListener("click", () => {
+  const el = $("recoveryCodeDisplay");
+  const text = el.textContent;
+  if (!text.startsWith("KBRC-")) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = el.textContent;
+    el.textContent = "Copied!";
+    setTimeout(() => { el.textContent = original; }, 1500);
+  }).catch(() => {});
+});
+
+// --- Restore Identity ---
+
+$("btnShowImport").addEventListener("click", (e) => {
+  e.preventDefault();
+  $("importPanel").classList.toggle("hidden");
+});
+
+$("btnRestore").addEventListener("click", () => {
+  const code = $("inputRecoveryCode").value.trim();
+  if (!code) return;
+  $("btnRestore").disabled = true;
+  $("restoreError").classList.add("hidden");
+  $("restoreSuccess").classList.add("hidden");
+  chrome.runtime.sendMessage({ type: "IMPORT_IDENTITY", code }, (res) => {
+    $("btnRestore").disabled = false;
+    if (res && res.ok) {
+      $("restoreSuccess").textContent = "Identity restored! UID: " + res.uid;
+      $("restoreSuccess").classList.remove("hidden");
+      $("inputRecoveryCode").value = "";
+      refreshStatus();
+    } else {
+      $("restoreError").textContent = res?.error || "Restore failed";
+      $("restoreError").classList.remove("hidden");
+    }
+  });
+});
+
 // --- Startup: restore cache first, then refresh from background ---
 
 restoreCachedStatus();

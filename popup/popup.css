@@ -211,6 +211,88 @@ body {
   display: none !important;
 }
 
+/* --- Backup / Restore --- */
+
+.divider-line {
+  height: 1px;
+  background: #333;
+  margin: 16px 0;
+}
+
+.backup-section {
+  text-align: center;
+}
+
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.btn-small {
+  padding: 6px 14px;
+  font-size: 12px;
+  background: #333;
+  color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-small:hover {
+  background: #444;
+}
+.btn-small:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recovery-code-display {
+  margin: 10px 0;
+  padding: 10px;
+  background: #16213e;
+  border: 1px dashed #4361ee;
+  border-radius: 6px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  color: #4cc9f0;
+  word-break: break-all;
+  cursor: pointer;
+  user-select: all;
+  transition: background 0.2s;
+}
+.recovery-code-display:hover {
+  background: #1a2a4e;
+}
+
+.btn-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #4361ee;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+#importPanel {
+  margin-top: 10px;
+}
+
+#importPanel .input-row input {
+  font-size: 11px;
+}
+
+.success {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #4CAF50;
+}
+
 /* Score ring colors — inverted: free=red(warm), busy=grey(cold) */
 .ring-free     { border-color: #F44336; }
 .ring-light    { border-color: #FF9800; }

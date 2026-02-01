@@ -6,6 +6,8 @@ import {
   dbGetWithEtag,
   dbSetIfMatch,
   dbListen,
+  exportIdentity,
+  restoreIdentity,
 } from "./lib/firebase-config.js";
 
 // --- State ---
@@ -401,6 +403,40 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       () => sendResponse({ ok: true }),
       (err) => sendResponse({ ok: false, error: err.message })
     );
+    return true;
+  }
+
+  if (msg.type === "EXPORT_IDENTITY") {
+    exportIdentity().then(
+      (code) => sendResponse({ ok: true, code }),
+      (err) => sendResponse({ ok: false, error: err.message })
+    );
+    return true;
+  }
+
+  if (msg.type === "IMPORT_IDENTITY") {
+    (async () => {
+      try {
+        // Stop existing listeners
+        if (partnerUnsubscribe) { partnerUnsubscribe(); partnerUnsubscribe = null; }
+        if (pairingUnsubscribe) { pairingUnsubscribe(); pairingUnsubscribe = null; }
+
+        const result = await restoreIdentity(msg.code);
+
+        // Reset state
+        partnerId = null;
+        partnerScore = 0;
+        initialized = false;
+        initFailed = false;
+
+        // Re-initialize with restored identity
+        await init();
+
+        sendResponse({ ok: true, uid: result.uid });
+      } catch (err) {
+        sendResponse({ ok: false, error: err.message });
+      }
+    })();
     return true;
   }
 });

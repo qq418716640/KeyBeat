@@ -58,6 +58,23 @@
         </div>
       </div>
     </div>
+
+    <!-- Backup / Restore -->
+    <div class="divider-line"></div>
+    <div class="backup-section">
+      <div class="section-title">Identity Backup</div>
+      <button id="btnExport" class="btn btn-small">Backup Identity</button>
+      <div id="recoveryCodeDisplay" class="recovery-code-display hidden"></div>
+      <a id="btnShowImport" class="btn-link" href="#">Restore from backup</a>
+      <div id="importPanel" class="hidden">
+        <div class="input-row">
+          <input id="inputRecoveryCode" type="text" placeholder="Paste recovery code" spellcheck="false">
+          <button id="btnRestore" class="btn btn-small">Restore</button>
+        </div>
+        <div id="restoreError" class="error hidden"></div>
+        <div id="restoreSuccess" class="success hidden"></div>
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>
