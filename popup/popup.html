@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">KeyBeat</h1>
+
+    <!-- Score display -->
+    <div class="scores">
+      <div class="score-card me">
+        <div class="score-label">Me</div>
+        <div class="score-ring" id="myRing">
+          <span class="score-value" id="myScore">--</span>
+        </div>
+        <div class="score-detail" id="myDetail"></div>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-card partner">
+        <div class="score-label" id="partnerLabel">Partner</div>
+        <div class="score-ring" id="partnerRing">
+          <span class="score-value" id="partnerScore">--</span>
+        </div>
+        <div class="score-detail" id="partnerDetail"></div>
+      </div>
+    </div>
+
+    <!-- Pairing section -->
+    <div id="pairSection">
+      <!-- Not paired -->
+      <div id="unpaired" class="pair-panel">
+        <p class="pair-hint">Pair with someone to see their activity</p>
+        <button id="btnGenerate" class="btn btn-primary">Generate Pair Key</button>
+        <div id="generatedKey" class="key-display hidden"></div>
+        <div class="divider-text">or</div>
+        <div class="input-row">
+          <input id="inputKey" type="text" placeholder="Enter pair key" maxlength="17" spellcheck="false">
+          <button id="btnJoin" class="btn btn-secondary">Join</button>
+        </div>
+        <div id="pairError" class="error hidden"></div>
+      </div>
+
+      <!-- Paired -->
+      <div id="paired" class="pair-panel hidden">
+        <p class="pair-status">Paired <span id="partnerIdDisplay"></span></p>
+        <button id="btnUnpair" class="btn btn-danger">Unpair</button>
+        <div id="confirmUnpair" class="confirm-bar hidden">
+          <span class="confirm-text">Sure?</span>
+          <button id="btnConfirmYes" class="btn btn-danger btn-sm">Yes</button>
+          <button id="btnConfirmNo" class="btn btn-secondary btn-sm">No</button>
+        </div>
+        <div id="confirmReally" class="confirm-bar hidden">
+          <span class="confirm-text">Really?</span>
+          <button id="btnReallyYes" class="btn btn-danger btn-sm">Yes</button>
+          <button id="btnReallyNo" class="btn btn-secondary btn-sm">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

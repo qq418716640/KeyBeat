@@ -1,0 +1,20 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code
+.claude/
+
+# Firebase config with real credentials
+lib/firebase-config.js
+
+# Packed extension
+*.crx
+*.pem
+*.zip

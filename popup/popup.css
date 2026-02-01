@@ -1,0 +1,219 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+.container {
+  padding: 16px;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+/* --- Scores --- */
+
+.scores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.score-card {
+  flex: 1;
+  text-align: center;
+}
+
+.score-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.score-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: border-color 0.5s;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.score-detail {
+  font-size: 10px;
+  color: #666;
+  margin-top: 6px;
+  min-height: 14px;
+}
+
+.score-divider {
+  width: 1px;
+  height: 60px;
+  background: #333;
+}
+
+/* --- Pairing --- */
+
+.pair-panel {
+  text-align: center;
+}
+
+.pair-hint {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  background: #4361ee;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #3a56d4;
+}
+
+.btn-secondary {
+  background: #333;
+  color: #e0e0e0;
+}
+.btn-secondary:hover {
+  background: #444;
+}
+
+.btn-danger {
+  background: #d32f2f;
+  color: #fff;
+}
+.btn-danger:hover {
+  background: #b71c1c;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.key-display {
+  margin: 10px 0;
+  padding: 10px;
+  background: #16213e;
+  border-radius: 6px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #4cc9f0;
+  user-select: all;
+  cursor: pointer;
+}
+
+.key-display .copy-hint {
+  display: block;
+  font-size: 10px;
+  color: #555;
+  margin-top: 4px;
+  letter-spacing: 0;
+}
+
+.divider-text {
+  font-size: 11px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #16213e;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  outline: none;
+}
+.input-row input:focus {
+  border-color: #4361ee;
+}
+
+.pair-status {
+  font-size: 13px;
+  color: #4cc9f0;
+  margin-bottom: 10px;
+}
+
+.error {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #ef5350;
+}
+
+.confirm-bar {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.confirm-text {
+  font-size: 12px;
+  color: #ef5350;
+}
+
+.btn-sm {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Score ring colors — inverted: free=red(warm), busy=grey(cold) */
+.ring-free     { border-color: #F44336; }
+.ring-light    { border-color: #FF9800; }
+.ring-moderate { border-color: #FFEB3B; }
+.ring-busy     { border-color: #4CAF50; }
+.ring-focus    { border-color: #9E9E9E; }
